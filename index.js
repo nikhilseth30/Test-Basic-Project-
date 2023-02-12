@@ -1,19 +1,5 @@
-// const express = require('express')
-// const path = require('path')
-// const app = express()
-
-
-// app.use(express.static(path.join(__dirname,'public')))
-
-// app.get("/test",(req,res)=>{
-//     res.send("<h1>Hello World</h1>")
-// })
-
-// const PORT = 8500
-// app.listen(PORT,()=> console.log(`server is running at ${PORT}`))
-
-
 const express= require('express')
+const uuid = require('uuid')
 const app = express()
 
 const members = [{
@@ -39,13 +25,11 @@ const members = [{
     status :"active"
 }]
 
+app.use(express.json())
+
 app.get("/showAllUser",(req,res)=>{
     res.status(200).json(members)
 })
-
-// app.get("/showUser/:id",(req,res)=>{
-//     console.log(req.params.id)
-// })
 
 app.get("/showUser/:uid",(req,res)=>{
     const id = req.params.uid
@@ -54,5 +38,16 @@ app.get("/showUser/:uid",(req,res)=>{
     // console.log(req.params.uid)
 })
 
-const PORT = 3500
-app.listen(PORT,()=>console.log(`server is running at ${PORT}`))
+app.post("/addUser/", (req,res)=>{
+    // const name = req.body.name
+    // const email = req.body.email
+    // const password = req.body.password
+    const{name,email,password} = req.body // shortcut method
+    members.push({id:uuid.v4(),name,email})
+    res.status(200).json(members)
+})  
+
+
+
+const PORT = process.env.PORT || 3500
+app.listen(PORT,()=>console.log(`server is running at ${PORT}`)) 
