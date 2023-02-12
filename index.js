@@ -16,37 +16,43 @@
 const express= require('express')
 const app = express()
 
-function middleware  (req, res,next){
-    console.log("Hye this is middleware")
-    next()
-}
+const members = [{
+    id : 1,
+    name : "louis",
+    email: "louis@gmail.com",
+    status :"active"
 
-app.use(middleware)
+},{
+    id : 2,
+    name : "nikhil",
+    email: "nikhil@gmail.com",
+    status :"inactive"
+},{
+    id : 3,
+    name : "shivanshu",
+    email: "shivanshu@gmail.com",
+    status :"active"
+},{
+    id : 4,
+    name : "vedant",
+    email: "vedamt@gmail.com",
+    status :"active"
+}]
 
-app.get("/",middleware,(req,res)=>{
-    res.send("Hye this is the GET Request")
+app.get("/showAllUser",(req,res)=>{
+    res.status(200).json(members)
 })
 
-app.get("/",(req, res)=>{
-    res.send("Hye this is the GET Request")
-})
+// app.get("/showUser/:id",(req,res)=>{
+//     console.log(req.params.id)
+// })
 
-app.get("/test",middleware,(req,res)=>{
-    res.send("Hye this is the TEST Request")
+app.get("/showUser/:uid",(req,res)=>{
+    const id = req.params.uid
+    const user = members.filter(member => member.id === parseInt(id))
+    user.length !==0 ? res.status(200).json(user) : res.status(200).json({msg:"user not found"})
+    // console.log(req.params.uid)
 })
-
-app.post("/",(req,res)=>{
-    res.send("Hye this is the POST Request")
-})
-
-app.put("/",(req,res)=>{
-    res.send("Hye this is the PUT Request")
-})
-
-app.delete("/",(req,res)=>{
-    res.send("Hye this is the DELETE Request")
-})
-
 
 const PORT = 3500
 app.listen(PORT,()=>console.log(`server is running at ${PORT}`))
